@@ -6,4 +6,10 @@ defined('DB_USER') ? null : define("DB_USER", "gallery");
 defined('DB_PASS') ? null : define("DB_PASS", "password");
 defined('DB_NAME') ? null : define("DB_NAME", "photo_gallery");
 
+/*
+mysql> GRANT ALL PRIVILEGES ON photo_gallery.*
+    ->  TO 'gallery'@'localhost'
+    -> IDENTIFIED BY 'password';
+*/
+
 ?>
