@@ -6,6 +6,7 @@ class MySQLDatabase {
   private $connection;
 
   function __construct(){
+    // automatically creates connection
     $this->open_connection();
   }
 

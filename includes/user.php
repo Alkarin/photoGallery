@@ -5,7 +5,7 @@ require_once('database.php');
 class User {
 
   // attribute for each column in users DB table
-  // User class/object is essentially a record from the DB table
+  // User class->object is essentially a record from the DB table
   public $id;
   public $username;
   public $password;
@@ -30,13 +30,29 @@ class User {
     global $database;
     $result_set = $database->query($sql);
     $object_array = array();
-    //
     while($row = $database->fetch_array($result_set)){
       $object_array[] = self::instantiate($row);
     }
     // return an array of objects
-    // $rows and raw result set will be be passed back to index, just recieve objects instead
+    // $rows and raw result set will NOT be passed back to index, just recieve objects instead
     return $object_array;
+  }
+
+  public static function authenticate($username="", $password=""){
+
+    // Passwords are NOT encrypted
+    // Should implement later w/ salting
+    global $database;
+    $username = $database->escape_value($username);
+    $password = $database->escape_value($password);
+
+    $sql  = "SELECT * FROM users ";
+    $sql .= "WHERE username = '{$username}' ";
+    $sql .= "AND password = '{$password}' ";
+    $sql .= "LIMIT 1";
+
+    $result_array = self::find_by_sql($sql);
+    return !empty($result_array) ? array_shift($result_array) : false;
   }
 
   public function full_name(){
@@ -51,8 +67,10 @@ class User {
     // builds user object from record
     // Could check that $record exists and is an array
 
-    // Simple, long-form approach:
+    // Needed for both approaches
     $object = new self();
+
+    // Simple, long-form approach:
     // $object->id         = $record['id'];
     // $object->username   = $record['username'];
     // $object->password   = $record['password'];
@@ -75,7 +93,7 @@ class User {
     // (including private ones) as the keys and their current values as the value
     $object_vars = get_object_vars($this);
 
-    // We don't care about the value, we just want to know if the key enchant_broker_dict_exists
+    // We don't care about the value, we just want to know if the key exists
     // does $attribute(key) exist in $object_vars
     // Will return true or false
     return array_key_exists($attribute, $object_vars);
