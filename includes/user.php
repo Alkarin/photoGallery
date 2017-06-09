@@ -1,6 +1,6 @@
 <?php
 // If class needs the database, we should require it before we start
-require_once('database.php');
+require_once(LIB_PATH.DS.'database.php');
 
 class User {
 
